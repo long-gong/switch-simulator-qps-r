@@ -5,11 +5,11 @@ set -e
 install_dir="$(pwd)/external"
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    sudo add-apt-repository universe
-    sudo apt-get update
+    sudo add-apt-repository -y universe
+    sudo apt-get -q update
     sudo apt-get install -y wget libz-dev
     sudo apt-get remove libboost*
-    sudo add-apt-repository ppa:mhier/libboost-latest
+    sudo add-apt-repository -y ppa:mhier/libboost-latest
     sudo apt-get update
     sudo apt-get install -y libboost1.73-dev
 elif [[ "$OSTYPE" == "darwin"* ]]; then
