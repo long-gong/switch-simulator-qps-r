@@ -7,16 +7,19 @@ matrix:
       os: osx
       compiler: clang
       env: CXX="clang++" CC="clang" BUILD_TYPE=release
+      pakages: boost1.73
     - name: Ubuntu 18.04 gcc
       os: linux
       dist: bionic
       compiler: gcc
       env: CXX="g++" CC="gcc" BUILD_TYPE=release
+      pakages: boost1.73
     - name: Ubuntu 18.04 clang
       os: linux
       dist: bionic
       compiler: clang
       env: CXX="clang++" CC="clang" BUILD_TYPE=release
+      pakages: boost1.73
 
 before_install:
   - chmod +x ./install_dependencies.sh && ./install_dependencies.sh

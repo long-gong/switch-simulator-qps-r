@@ -8,10 +8,9 @@ install_dir="$(pwd)/external"
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 sudo add-apt-repository universe
 sudo apt-get update
-sudo apt-get install -y wget libz-dev libboost-graph-dev
+sudo apt-get install -y wget libz-dev 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
 brew install libzip 
-brew install boost
 fi
 
 
