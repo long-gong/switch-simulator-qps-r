@@ -16,9 +16,6 @@ This project supports the following platforms
   * [HdrHistogram_c](https://github.com/HdrHistogram/HdrHistogram_c.git)
   * [json](https://github.com/nlohmann/json.git)
   * [boost-graph](https://github.com/boostorg/graph)
-
-The following is optional (for Unit Test).
-
   * [Catch2](https://github.com/catchorg/Catch2)
 
 Dependencies can be installed by 
@@ -36,3 +33,11 @@ cd build
 cmake ..
 make 
 ```
+
+## Run
+
+```bash
+./switch_simulator <config-file.json>
+```
+
+`<config-file.json>` is a configuration file in `JSON` format. Examples of configurations can be found in [experiments](./experiments)
