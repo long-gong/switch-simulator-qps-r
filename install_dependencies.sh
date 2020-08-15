@@ -11,6 +11,7 @@ sudo apt-get update
 sudo apt-get install -y wget libz-dev 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
 brew install libzip 
+brew install boost@1.73
 fi
 
 
