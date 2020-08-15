@@ -5,7 +5,15 @@ set -e
 
 install_dir="$(pwd)/external"
 
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+sudo add-apt-repository universe
+sudo apt-get update
 sudo apt-get install -y wget libz-dev libboost-graph-dev
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+brew install libzip 
+brew install boost
+fi
+
 
 if ! [ -d ${install_dir} ]; then 
 mkdir -p "${install_dir}"
