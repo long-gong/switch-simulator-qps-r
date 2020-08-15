@@ -1,5 +1,7 @@
 # (INPUT-QUEUED) SWITCH SIMULATOR for QPS-r
 
+[![Build Status](https://travis-ci.org/long-gong/switch-simulator-qps-r.svg?branch=master)](https://travis-ci.org/long-gong/switch-simulator-qps-r)
+
 Simulation codes for our switching paper:
 
 Long Gong, Jun (Jim) Xu, Liang Liu, and Siva Theja Maguluri. 2020. QPS-r: A Cost-Effective Iterative Switching Algorithm for Input-Queued Switches. In Proceedings of the 13th EAI International Conference on Performance Evaluation Methodologies and Tools (VALUETOOLS ’20). Association for Computing Machinery, New York, NY, USA, 19–26. DOI:https://doi.org/10.1145/3388831.3388836
