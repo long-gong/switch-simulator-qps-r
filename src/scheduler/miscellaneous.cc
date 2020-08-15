@@ -25,7 +25,7 @@ void RoundRobin::display(std::ostream &os) const {
 // Implementation of class sLQF
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 sLQF::sLQF(std::string name, int num_inputs, int num_outputs,
-           unsigned long seed)
+           std::mt19937::result_type seed)
     : RandomizedScheduler(std::move(name), num_inputs, num_outputs, true,
                           seed) {}
 void sLQF::schedule(const saber::IQSwitch *sw) {
@@ -56,7 +56,7 @@ void sLQF::init(const IQSwitch *sw) { /* do nothing */ }
 // Implementation of class iPOC
 // //////////////////////////////////////////////////////////////////////////////////////////////////
 iPOC::iPOC(std::string name, int num_inputs, int num_outputs, int num_iters,
-           unsigned long seed)
+           std::mt19937::result_type seed)
     : RandomizedScheduler(std::move(name), num_inputs, num_outputs, true, seed),
       _num_iters(num_iters),
       _non_empty_voqs(_num_inputs) {}
