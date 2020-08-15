@@ -1,0 +1,36 @@
+{
+  "type": "delay_vs_load",
+  "simulator": {
+    "name": "IQSwitchSimulator",
+    "num_inputs": 64,
+    "num_outputs": 64,
+    "load": [
+     0.85, 0.86, 0.865, 0.87, 0.875, 0.88, 0.885, 0.89, 0.895
+    ],
+    "traffic_patterns": [
+      "uniform",
+      "quasi_diagonal",
+      "log_diagonal",
+      "diagonal"
+    ],
+    "injection": "bernoulli",
+    "switch": {
+      "name": "IQSwitch",
+      "type": "generic"
+    },
+    "seeds": {
+      "traffic_pattern": 2312418790,
+      "injection": 1543682012,
+      "scheduler": 1007959227,
+      "comments": "Not all schedulers need seed"
+    }
+  },
+  "schedulers": [
+    {
+      "name": "sb_qps",
+      "frame_size": 32,
+      "iterations": 1,
+      "accepting": 1
+    }
+  ]
+}
