@@ -9,8 +9,9 @@ namespace saber {
 // Class for input-queued switch factory
 class IQSwitchFactory {
  public:
- static IQSwitch* Create(const json &switch_conf, const json &scheduler_conf={});
+  static IQSwitch *Create(const json &switch_conf,
+                          const json &scheduler_conf = {});
 };
-}
+}  // namespace saber
 
-#endif // IQ_SWITCH_FACTORY_H
+#endif  // IQ_SWITCH_FACTORY_H

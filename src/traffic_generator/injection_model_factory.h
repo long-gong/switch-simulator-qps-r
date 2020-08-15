@@ -5,19 +5,18 @@
 
 #include <iostream>
 
-#include "injection_model.h"
 #include "bernoulli_injection_model.h"
+#include "injection_model.h"
+#include "nlohmann/json.hpp"
 #include "onoff_injection_model.h"
 
-#include "nlohmann/json.hpp"
-
-using json=nlohmann::json;
+using json = nlohmann::json;
 
 namespace saber {
 class InjectionModelFactory {
  public:
   static InjectionModel *Create(const json &conf);
 };
-}
+}  // namespace saber
 
-#endif // INJECTION_MODEL_FACTORY_H
+#endif  // INJECTION_MODEL_FACTORY_H

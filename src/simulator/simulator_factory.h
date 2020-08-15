@@ -4,13 +4,14 @@
 #define SIMULATOR_FACTORY_H
 
 #include <exceptions.hpp>
+
 #include "simulator.h"
 
 namespace saber {
 class SimulatorFactory {
  public:
-  static Simulator *Create(const json &conf) ;
-}; // class IQSwitchSimulator
-} // namespace saber
+  static Simulator *Create(const json &conf);
+};  // class IQSwitchSimulator
+}  // namespace saber
 
-#endif // SIMULATOR_FACTORY_H
+#endif  // SIMULATOR_FACTORY_H

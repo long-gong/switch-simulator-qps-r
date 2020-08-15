@@ -3,20 +3,16 @@
 // main() provided by Catch in the file test_main.cc
 //
 
-#include <catch2/catch.hpp>
-#include <nlohmann/json.hpp>
-
-#include <chrono> // for std::chrono::system_clock::now()
-#include <sstream>
-#include <random>
-
 #include <simulator/simulator_factory.h>
+
+#include <catch2/catch.hpp>
+#include <chrono>  // for std::chrono::system_clock::now()
+#include <nlohmann/json.hpp>
+#include <random>
+#include <sstream>
 
 using namespace saber;
 using json = nlohmann::json;
-
-
-
 
 TEST_CASE("1. Creating a simple simulator should succeed", "[simulator]") {
   json conf =
@@ -28,7 +24,8 @@ TEST_CASE("1. Creating a simple simulator should succeed", "[simulator]") {
       "    \"most_simulation_efforts\": 200,\n"
       "    \"load\": [0.1, 0.2, 0.3, 0.4, 0.5],\n"
       "    \"traffic_patterns\": [\n"
-      "        \"uniform\", \"quasi_diagonal\", \"log_diagonal\", \"diagonal\"\n"
+      "        \"uniform\", \"quasi_diagonal\", \"log_diagonal\", "
+      "\"diagonal\"\n"
       "    ],\n"
       "    \"injection\": \"bernoulli\",\n"
       "    \"switch\" : {\n"
@@ -49,13 +46,13 @@ TEST_CASE("1. Creating a simple simulator should succeed", "[simulator]") {
     auto* sim = SimulatorFactory::Create(conf);
 
     REQUIRE(sim != nullptr);
-    delete(sim);
+    delete (sim);
   }
   SECTION("Simulator with a simplified IQ switch") {
     conf["switch"]["type"] = "simplified";
     auto* sim = SimulatorFactory::Create(conf);
 
     REQUIRE(sim != nullptr);
-    delete(sim);
+    delete (sim);
   }
 }

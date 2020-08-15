@@ -8,14 +8,14 @@
 
 #include "matrix_accessor.h"
 
-// value of `mat` will be changed in this API. If you won't use it after this API, please move
-// your object to this API to avoid unnecessary copy!
+// value of `mat` will be changed in this API. If you won't use it after this
+// API, please move your object to this API to avoid unnecessary copy!
 //
 // throws std::logic_error on failure
 template <typename doubly_stochastic_matrix>
 void birkhoff_von_neumann_decomposition(
     doubly_stochastic_matrix mat,  // doubly stochatic matrix
-    std::vector<std::vector<int >>
+    std::vector<std::vector<int>>
         &matches,     // matches after decompositions (return)
     int row_sum = -1  // row sum, -1 ==> need calculation
 );
@@ -52,9 +52,9 @@ unsigned cal_row_sum(const doubly_stochastic_matrix &mat) {
 
 // implementations
 template <typename doubly_stochastic_matrix>
-void birkhoff_von_neumann_decomposition(
-    doubly_stochastic_matrix dmat, std::vector<std::vector<int>> &matches,
-    int row_sum) {
+void birkhoff_von_neumann_decomposition(doubly_stochastic_matrix dmat,
+                                        std::vector<std::vector<int>> &matches,
+                                        int row_sum) {
   if (row_sum < 0) cal_row_sum(dmat);
 
   auto g = build_graph(dmat);
@@ -63,7 +63,7 @@ void birkhoff_von_neumann_decomposition(
   auto n_vertices = dmat.rows();
   std::vector<int> mate(n_vertices * 2);
   while (row_sum > 0) {
-    matches.emplace_back(n_vertices, 0);// TODO: change 0 to -1
+    matches.emplace_back(n_vertices, 0);  // TODO: change 0 to -1
     auto &new_match = matches.back();
     edmonds_maximum_cardinality_matching(g, &mate[0]);
 
@@ -90,15 +90,15 @@ void birkhoff_von_neumann_decomposition(
       }
     }
     //
-    for (unsigned mid = 1;mid < delta;++ mid) matches.push_back(new_match);
+    for (unsigned mid = 1; mid < delta; ++mid) matches.push_back(new_match);
     row_sum -= delta;
   }
 }
 
 template <>
-void birkhoff_von_neumann_decomposition(
-    std::vector<std::vector<unsigned>> mat,
-    std::vector<std::vector<int>> &matches, int row_sum) {
+void birkhoff_von_neumann_decomposition(std::vector<std::vector<unsigned>> mat,
+                                        std::vector<std::vector<int>> &matches,
+                                        int row_sum) {
   if (mat.empty()) return;
   if (row_sum < 0)
     row_sum = std::accumulate(mat.front().cbegin(), mat.front().cend(), (int)0);

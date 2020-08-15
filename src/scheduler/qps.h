@@ -10,6 +10,7 @@ namespace saber {
 // /////////////////////////////////////////////////////////////////////
 class QPS : public RandomizedScheduler {
   friend class SchedulerFactory;
+
  protected:
   using bst_t = std::vector<int>;
   int _iterations{1};
@@ -20,12 +21,8 @@ class QPS : public RandomizedScheduler {
 
   std::vector<bst_t> _bst;
 
-  QPS(std::string name,
-      int num_inputs,
-      int num_outputs,
-      std::mt19937::result_type seed,
-      int iterations,
-      std::string accept_policy,
+  QPS(std::string name, int num_inputs, int num_outputs,
+      std::mt19937::result_type seed, int iterations, std::string accept_policy,
       bool without_replacement);
 
   void handle_arrivals(const IQSwitch *sw);
@@ -33,15 +30,16 @@ class QPS : public RandomizedScheduler {
   inline int sampling(int source);
   inline int queue_length(int source);
   inline int remove_voq(int source, int destination);
-  inline void restore_voq(const std::vector<std::pair<std::pair<int, int>, int> > &restore_pairs);
- public:
+  inline void restore_voq(
+      const std::vector<std::pair<std::pair<int, int>, int> > &restore_pairs);
 
+ public:
   ~QPS() override = default;
-  void reset() override ;
+  void reset() override;
   void schedule(const IQSwitch *sw) override;
   void init(const IQSwitch *sw) override;
-  void display(std::ostream &os) const override ;
+  void display(std::ostream &os) const override;
 };
-} // namespace saber
+}  // namespace saber
 
-#endif // QPS_H
+#endif  // QPS_H

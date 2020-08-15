@@ -1,17 +1,14 @@
 
 #include "qps.h"
+
 #include <switch/iq_switch.h>
 
 namespace saber {
 // Implementation of class QPS
 // /////////////////////////////////////////////////////////////////////////////////
-QPS::QPS(std::string name,
-         int num_inputs,
-         int num_outputs,
-         std::mt19937::result_type seed,
-         int iterations,
-         std::string accept_policy,
-         bool without_replacement)
+QPS::QPS(std::string name, int num_inputs, int num_outputs,
+         std::mt19937::result_type seed, int iterations,
+         std::string accept_policy, bool without_replacement)
     : RandomizedScheduler(std::move(name), num_inputs, num_outputs, true, seed),
       _iterations(iterations),
       _without_replacement(without_replacement),
@@ -23,7 +20,8 @@ QPS::QPS(std::string name,
 }
 void QPS::reset() {
   RandomizedScheduler::reset();
-  for (size_t i = 0; i < _num_inputs; ++i) std::fill(_bst[i].begin(), _bst[i].end(), 0);
+  for (size_t i = 0; i < _num_inputs; ++i)
+    std::fill(_bst[i].begin(), _bst[i].end(), 0);
 }
 void QPS::display(std::ostream &os) const {
   RandomizedScheduler::display(os);
@@ -31,22 +29,21 @@ void QPS::display(std::ostream &os) const {
   os << "iterations           : " << _iterations
      << "\naccepting policy     : " << _accept_policy
      << "\nwithout replacement  : " << _without_replacement
-     << "\nbst                  : " << _bst
-     << "\n";
+     << "\nbst                  : " << _bst << "\n";
 }
 void QPS::handle_arrivals(const saber::IQSwitch *sw) {
-  assert (sw != nullptr);
+  assert(sw != nullptr);
   auto arrivals = sw->get_arrivals();
   for (const auto &sd : arrivals) {
     if (sd.first == -1) break;
-    assert (sd.first >= 0 && sd.first < _num_inputs);
+    assert(sd.first >= 0 && sd.first < _num_inputs);
     assert(sd.second >= 0 && sd.second < _num_outputs);
     BST::update<int>(_bst[sd.first], sd.second + _left_start);
   }
 }
 
 void QPS::handle_departures(const saber::IQSwitch *sw) {
-  assert (sw != nullptr);
+  assert(sw != nullptr);
   for (int s = 0; s < _num_inputs; ++s) {
     auto d = _in_match[s];
     if (d != -1 && sw->get_queue_length(s, d) > 0) {
@@ -56,7 +53,7 @@ void QPS::handle_departures(const saber::IQSwitch *sw) {
 }
 
 int QPS::sampling(int source) {
-  assert (source >= 0 && source < _num_inputs);
+  assert(source >= 0 && source < _num_inputs);
   std::uniform_real_distribution<double> dist(0, _bst[source][1]);
   double r = dist(_eng);
 
@@ -68,33 +65,37 @@ int QPS::sampling(int source) {
   std::cerr << "bst : " << _bst[source] << "\n";
 #endif
 
-  assert (out >= 0 && out < _num_outputs);
+  assert(out >= 0 && out < _num_outputs);
   return out;
 }
 
 int QPS::queue_length(int source) {
-  assert (source >= 0 && source < _num_inputs);
+  assert(source >= 0 && source < _num_inputs);
   return _bst[source][1];
 }
 
 int QPS::remove_voq(int source, int destination) {
-  assert (source >= 0 && source < _num_inputs);
-  assert (destination >= 0 && destination < _num_outputs);
+  assert(source >= 0 && source < _num_inputs);
+  assert(destination >= 0 && destination < _num_outputs);
 
   return BST::remove<int>(_bst[source], destination + _left_start);
 }
 
-void QPS::restore_voq(const std::vector<std::pair<std::pair<int, int>, int> > &restore_pairs) {
+void QPS::restore_voq(
+    const std::vector<std::pair<std::pair<int, int>, int> > &restore_pairs) {
   for (const auto &sdq : restore_pairs) {
-    assert(sdq.first.first >= 0 && sdq.first.first < _num_inputs && "source port range check");
-    assert(sdq.first.second >= 0 && sdq.first.second < _num_outputs && "destination port range check");
+    assert(sdq.first.first >= 0 && sdq.first.first < _num_inputs &&
+           "source port range check");
+    assert(sdq.first.second >= 0 && sdq.first.second < _num_outputs &&
+           "destination port range check");
     assert(sdq.second > 0 && "queue length");
-    BST::update<int>(_bst[sdq.first.first], sdq.first.second + _left_start, sdq.second);
+    BST::update<int>(_bst[sdq.first.first], sdq.first.second + _left_start,
+                     sdq.second);
   }
 }
 
 void QPS::schedule(const saber::IQSwitch *sw) {
-  assert (sw != nullptr);
+  assert(sw != nullptr);
   // arrival handling
   handle_arrivals(sw);
 
@@ -121,27 +122,31 @@ void QPS::schedule(const saber::IQSwitch *sw) {
     // Step 1: Proposing
     for (int i = 0; i < _num_inputs; ++i) {
       int in = inputs[i];
-      if (queue_length(in) == 0 || _in_match[in] != -1) continue;// no packets or already matched
+      if (queue_length(in) == 0 || _in_match[in] != -1)
+        continue;  // no packets or already matched
 
-      auto out = sampling(in);// sampling an output for this input
-      requests[in] = out;// record it
+      auto out = sampling(in);  // sampling an output for this input
+      requests[in] = out;       // record it
       if (_out_match[out] != -1) continue;
 
-      // Note that last_check[out] records the input ports whose request is "accepted" by
-      // the output
-      if (last_check[out] != -1) {// requested before
+      // Note that last_check[out] records the input ports whose request is
+      // "accepted" by the output
+      if (last_check[out] != -1) {  // requested before
         if (_accept_policy == "longest_first") {
-          if (sw->get_queue_length(in, out) > sw->get_queue_length(last_check[out], out)) {
+          if (sw->get_queue_length(in, out) >
+              sw->get_queue_length(last_check[out], out)) {
             last_check[out] = in;
           }
-        } else if (_accept_policy == "earliest_first" || _accept_policy == "random") {
+        } else if (_accept_policy == "earliest_first" ||
+                   _accept_policy == "random") {
           // do nothing
         } else if (_accept_policy == "shortest_first") {
-          if (sw->get_queue_length(in, out) < sw->get_queue_length(last_check[out], out)) {
+          if (sw->get_queue_length(in, out) <
+              sw->get_queue_length(last_check[out], out)) {
             last_check[out] = in;
           }
         }
-      } else {// the first one
+      } else {  // the first one
         last_check[out] = in;
       }
     }
@@ -159,15 +164,15 @@ void QPS::schedule(const saber::IQSwitch *sw) {
         _in_match[in] = out;
       }
     }
-    // For without replacement, we need to change the queue length of certain VOQ in the _bst
-    // to zero
+    // For without replacement, we need to change the queue length of certain
+    // VOQ in the _bst to zero
     if (_without_replacement && _iterations > 0) {
       for (int in = 0; in < _num_inputs; ++in) {
         if (_in_match[in] == -1) {
           int out = requests[in];
           if (out != -1) {
             auto old = remove_voq(in, out);
-            assert (old == sw->get_queue_length(in, out));
+            assert(old == sw->get_queue_length(in, out));
             restore_sd_pairs.push_back({{in, out}, old});
           }
         }
@@ -179,10 +184,10 @@ void QPS::schedule(const saber::IQSwitch *sw) {
   //
   handle_departures(sw);
 }
-void QPS::init(const IQSwitch* sw) {
-  for (int s = 0;s < _num_inputs;++ s)
-    for(int d = 0;d < _num_outputs;++ d)
-      if (sw->get_queue_length(s, d) > 0) BST::update<int>(_bst[s], d + _left_start, sw->get_queue_length(s, d));
-
+void QPS::init(const IQSwitch *sw) {
+  for (int s = 0; s < _num_inputs; ++s)
+    for (int d = 0; d < _num_outputs; ++d)
+      if (sw->get_queue_length(s, d) > 0)
+        BST::update<int>(_bst[s], d + _left_start, sw->get_queue_length(s, d));
 }
-} // namespace saber
+}  // namespace saber

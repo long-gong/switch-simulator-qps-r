@@ -1,17 +1,18 @@
 #ifndef __BASE_ALLOCATE_H_
 #define __BASE_ALLOCATE_H_
 
-#include "bitmap.h"
 #include <algorithm>
 #include <functional>
 #include <memory>
 #include <stdexcept>
 #include <vector>
 
+#include "bitmap.h"
+
 using bitmap_vector = std::vector<BitMap>;
 
 class not_implement_error : public std::logic_error {
-public:
+ public:
   explicit not_implement_error(std::string name)
       : std::logic_error(std::move(name) + " was not implemented!") {}
 };
@@ -30,4 +31,4 @@ struct base_allocate {
   }
 };
 
-#endif //__BASE_ALLOCATE_H_
+#endif  //__BASE_ALLOCATE_H_

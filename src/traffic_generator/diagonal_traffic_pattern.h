@@ -10,12 +10,13 @@ namespace saber {
 // //////////////////////////////////////////////////////////////////////////////////
 class DiagonalTrafficPattern : public RandomTrafficPattern {
   friend class TrafficPatternFactory;
+
  protected:
-  DiagonalTrafficPattern(int num_nodes, std::mt19937::result_type seed) ;
+  DiagonalTrafficPattern(int num_nodes, std::mt19937::result_type seed);
 
  public:
-  int destination(int source) override ;
-  void reset() override ;
+  int destination(int source) override;
+  void reset() override;
   void display(std::ostream& os) const override;
   std::ostream& operator<<(std::ostream& os) const override;
   ~DiagonalTrafficPattern() override = default;
@@ -24,6 +25,6 @@ class DiagonalTrafficPattern : public RandomTrafficPattern {
   std::uniform_real_distribution<double> _distribution;
   const double _two_thirds{2.0 / 3.0};
 };
-}
+}  // namespace saber
 
-#endif // DIAGONAL_TRAFFIC_PATTERN_H
+#endif  // DIAGONAL_TRAFFIC_PATTERN_H

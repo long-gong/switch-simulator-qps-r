@@ -25,15 +25,13 @@ class BitMap {
   // find the first set bit
   unsigned ffs() const {
 #if defined(__GNUC__)
-    if (_data == 0ull)
-      return _len;
+    if (_data == 0ull) return _len;
     return __builtin_ctzl(_data);
 #else
     for (unsigned i = 0; i < _len; ++i) {
-    if (_data & BitMap::_maskbit(i))
-      return i;
-  }
-  return _len;
+      if (_data & BitMap::_maskbit(i)) return i;
+    }
+    return _len;
 #endif
   }
 
@@ -78,9 +76,7 @@ class BitMap {
   }
 
   // reset the (pos)-th bit
-  BitMap &reset(unsigned pos) {
-    return set(pos, false);
-  }
+  BitMap &reset(unsigned pos) { return set(pos, false); }
 
   bool test(unsigned pos) const {
     return ((_data & BitMap::_maskbit(pos)) != 0ull);
@@ -92,8 +88,7 @@ class BitMap {
   // convert to string
   std::string to_string() const {
     std::string s(_len, '0');
-    for (unsigned i = _len; i > 0; --i)
-      s[i - 1] = (test(i - 1) ? '1' : '0');
+    for (unsigned i = _len; i > 0; --i) s[i - 1] = (test(i - 1) ? '1' : '0');
     return s;
   }
 
@@ -105,9 +100,7 @@ class BitMap {
   }
 
   // (read-write) access the (pos)-th bit
-  reference operator[](unsigned pos) {
-    return reference(*this, pos);
-  }
+  reference operator[](unsigned pos) { return reference(*this, pos); }
 
   // flip the entire bitmap
   BitMap &operator~() { return flip(); }
@@ -146,15 +139,17 @@ class BitMap {
     friend class BitMap;
     uint64_t *_data_ptr;
     unsigned _pos;
-    reference(BitMap &b, unsigned pos) noexcept: _data_ptr(&b._data), _pos(pos) {}
+    reference(BitMap &b, unsigned pos) noexcept
+        : _data_ptr(&b._data), _pos(pos) {}
+
    public:
     ~reference() = default;
-    operator bool() const noexcept                    // convert to bool
+    operator bool() const noexcept  // convert to bool
     {
       auto bit_val = ((*_data_ptr) >> _pos) & 1ull;
       return (bit_val != 0ull);
     }
-    reference &operator=(bool x) noexcept             // assign bool
+    reference &operator=(bool x) noexcept  // assign bool
     {
       if (x)
         *_data_ptr |= BitMap::_maskbit(_pos);
@@ -163,7 +158,7 @@ class BitMap {
 
       return *this;
     }
-    reference &operator=(const reference &x) noexcept // assign bit
+    reference &operator=(const reference &x) noexcept  // assign bit
     {
       if (((*x._data_ptr) & BitMap::_maskbit(_pos)))
         *_data_ptr |= BitMap::_maskbit(_pos);
@@ -172,12 +167,12 @@ class BitMap {
 
       return *this;
     }
-    reference &flip() noexcept                        // flip bit value
+    reference &flip() noexcept  // flip bit value
     {
       *_data_ptr ^= BitMap::_maskbit(_pos);
       return *this;
     }
-    bool operator~() const noexcept                   // return inverse value
+    bool operator~() const noexcept  // return inverse value
     {
       return ((*_data_ptr & BitMap::_maskbit(_pos)) == 0);
     }
@@ -214,4 +209,4 @@ inline std::ostream &operator<<(std::ostream &os, const BitMap &obj) {
   return os;
 }
 
-#endif // BITMAP__BITMAP_H_
+#endif  // BITMAP__BITMAP_H_

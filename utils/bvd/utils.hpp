@@ -38,10 +38,10 @@ inline bool check_doubly_stochastic(matrix &mat, unsigned w = (size_t)-1) {
 
 template <typename matrix>
 inline void padding_to_doubly_stochastic(
-    matrix &mat,                          // non-negative square matrix
-    unsigned w,                           // maximum row sum or col sum
-    const std::vector<unsigned>& row_sums = {},  // sums of each row
-    const std::vector<unsigned>& col_sums = {}   // sums of each column
+    matrix &mat,                                 // non-negative square matrix
+    unsigned w,                                  // maximum row sum or col sum
+    const std::vector<unsigned> &row_sums = {},  // sums of each row
+    const std::vector<unsigned> &col_sums = {}   // sums of each column
 ) {
   const size_t m = mat.rows();
   if (m == 0) return;

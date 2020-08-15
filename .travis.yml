@@ -24,3 +24,4 @@ before_install:
 script:
   - CC="$CC" CXX="$CXX" cmake .
   - make -j$(nproc)
+  - make test

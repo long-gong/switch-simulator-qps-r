@@ -22,4 +22,4 @@ TrafficPattern *TrafficPatternFactory::Create(const json &conf) {
 
   return result;
 }
-} // namespace saber
+}  // namespace saber

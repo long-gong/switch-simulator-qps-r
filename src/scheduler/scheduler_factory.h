@@ -5,34 +5,32 @@
 
 #include <chrono>
 #include <cmath>
-
 #include <nlohmann/json.hpp>
 
-#include "scheduler.h"
 #include "batch_scheduler.h"
+#include "scheduler.h"
 //#include "edge_coloring_batch_scheduler.h"
-#include "maximal_scheduler.h"
-#include "max_weight_scheduler.h"
-#include "qps.h"
 #include "fair_frame.h"
+#include "max_weight_scheduler.h"
+#include "maximal_scheduler.h"
 #include "miscellaneous.h"
+#include "qps.h"
 #include "sb_qps.h"
 
 //#include "sb_qps.h"
 
-
 namespace saber {
 using json = nlohmann::json;
-using sys_clock_t=std::chrono::system_clock;
+using sys_clock_t = std::chrono::system_clock;
 // Class for scheduler factory
 // ///////////////////////////////////////////////////////////////////////////////////////////////
 class SchedulerFactory {
  public:
-  static Scheduler *Create(const json &conf) ;
+  static Scheduler *Create(const json &conf);
 };
 
 // class SchedulerFactory
 
-}
+}  // namespace saber
 
-#endif // SCHEDULER_FACTORY_H
+#endif  // SCHEDULER_FACTORY_H
