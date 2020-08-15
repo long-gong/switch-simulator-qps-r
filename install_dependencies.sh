@@ -9,6 +9,10 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 sudo add-apt-repository universe
 sudo apt-get update
 sudo apt-get install -y wget libz-dev 
+sudo apt-get remove libboost*
+sudo add-apt-repository ppa:mhier/libboost-latest
+sudo apt-get update
+sudo apt-get install -y libboost1.73-dev
 elif [[ "$OSTYPE" == "darwin"* ]]; then
 brew install libzip 
 brew install boost@1.73
